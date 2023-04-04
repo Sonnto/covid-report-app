@@ -1,0 +1,10 @@
+extends layout 
+
+block main-content 
+  h1.page-title List of Countries and Regions
+  h2 Please select a country
+  ul
+    each c in countries.data
+      li 
+        - let url = `/provinces?regionIso=${c.iso}`
+        a(href=url) #{c.name}

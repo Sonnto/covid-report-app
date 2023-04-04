@@ -1,0 +1,25 @@
+extends layout 
+
+block main-content 
+  h1.page-title COVID Report for all of #{report.data[0].region.province}, #{report.data[0].region.name}
+  p
+    b Total confirmed cases: 
+    #{report.data[0].confirmed}
+  p
+    b Total deaths: 
+    #{report.data[0].deaths}
+  p
+    b Last updated: 
+    #{report.data[0].last_update}
+  p
+    b Latitude: 
+    #{report.data[0].region.lat}
+  p
+    b Longitude: 
+    #{report.data[0].region.long}
+
+  //- h2 COVID reports for select cities within #{report.data[0].region.province}, #{report.data[0].region.name}
+  //- ul
+  //-   each r in report.data
+  //-     div
+  //-     p Total confirmed cases: #{r.[0].cities.names}
