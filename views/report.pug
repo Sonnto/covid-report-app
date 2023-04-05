@@ -12,8 +12,14 @@ block main-content
     b Last updated: 
     #{report.data[0].last_update}
 
-    h2 Map: 
-    div#map(style="height:500px;")
+  iframe(width="550",
+    height="350",
+    frameborder="0", style="border:0",
+    referrerpolicy="no-referrer-when-downgrade",
+    src=`https://www.google.com/maps/embed/v1/place?key=${gMapsApiKey}&q=${report.data[0].region.province},${report.data[0].region.name}&center=${report.data[0].region.lat},${report.data[0].region.long}`,
+    allowfullscreen)
+
+
 
   //- p
   //-   b Latitude: 
