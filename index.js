@@ -1,14 +1,24 @@
 const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
+const { Loader } = require("@googlemaps/js-api-loader");
 
 dotenv.config();
+
 const covid19 = require("./modules/covid19/api");
 const googleMaps = require("./modules/gmaps/api");
 
 //set up Express app
 const app = express();
 const port = process.env.PORT || 8888;
+
+//set up Google Maps API
+const gMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+const loader = new Loader({
+  apiKey: gMapsApiKey,
+  version: "weekly",
+  libraries: ["places"],
+});
 
 //important folders
 app.set("views", path.join(__dirname, "views"));
@@ -43,7 +53,15 @@ app.get("/report", async (req, res) => {
   console.log(province);
   let report = await covid19.getReport(regionIso, province);
   console.log(report);
-  res.render("report", { title: "COVID Report", report: report });
+  //Load the Google Maps API
+  await loader.load();
+
+  //Pass Google Maps API to report view
+  res.render("report", {
+    title: "COVID Report",
+    report: report,
+    gMapsApiKey: gMapsApiKey,
+  });
 });
 
 //set up server listening
