@@ -11,6 +11,21 @@ block main-content
   p
     b Last updated: 
     #{report.data[0].last_update}
+
+    h2 Map: 
+    div#map(style="height:500px;")
+    script.
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: #{report.data[0].region.lat}, lng: #{report.data[0].region.long} },
+        zoom: 8,
+      });
+      const marker = new google.maps.Marker({
+        position: { lat: #{report.data[0].region.lat}, lng: #{report.data[0].region.long} },
+        map: map,
+      });
+    }
+
   p
     b Latitude: 
     #{report.data[0].region.lat}
