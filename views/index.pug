@@ -1,11 +1,12 @@
 extends layout
 
 block main-content
-  h1.page-title List of Countries and Regions
-  h2 Please select a country or region
+  h1.page-title COVID-19 Report Repository
+  h2.page-subtitle Regions Available for Selection
   //- Country/region selection form
   form(action="/" method="get" id="region-form")
     select(name="regionIso", onchange="submitForm();")
+      option(value="" disabled selected) --- Select a Region or Country ---
       each r in regions
         - if (!regions.includes(r.region.name))
           //- Check if regionIso matches current region.iso value
@@ -14,22 +15,32 @@ block main-content
           else
             option(value=r.region.iso) #{r.region.name}
           - regions.push(r.region.name)
+
   //- Area selection form
   if areas && areas.length > 0
+    h2.page-subtitle Territories Available for Selection
     form(action="/report" method="get" id="area-form")
       select(name="area")
+        option(value="" disabled selected) --- Select a Territory, Province, or State ---
+        option(value="") Entire region
         each a in areas
+          if (a.region.lat != null && a.region.long != null && a.region.lat.trim() !== "" && a.region.long.trim() !== "" && parseFloat(a.region.lat.trim()) !== 0.0 && parseFloat(a.region.long.trim()) !== 0.0)
           option(value=a.region.province) #{a.region.province}
       input(type="hidden" name="regionIso" value=regionIso)
       input(type="submit" value="Get Report")
-
+  
+  //- JavaScript for ensuring if user changes regionIso, it won't submit for a report
+  //- Ensures to show the area options that aren't cities and if there are only 1-2 options, generally, the country only has data over the entity that is the country itself, so it will auto submit the form for a report.
   script.
+    const submitForm = () => {
+      const form = document.getElementById("region-form");
+      form.submit();
+    }
     const form = document.getElementById('area-form');
     const select = form.querySelector('select');
     const options = select.querySelectorAll('option');
     const nullOptions = Array.from(options).filter(option => !option.value.trim()).length;
     const nonNullOptions = options.length - nullOptions;
-
     if (nonNullOptions <= 2 && nullOptions > 0) {
         form.submit();
     }
