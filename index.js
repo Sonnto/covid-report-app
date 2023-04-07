@@ -1,12 +1,9 @@
 const express = require("express");
 const path = require("path");
 const dotenv = require("dotenv");
-// const { Loader } = require("@googlemaps/js-api-loader");
+const covid19 = require("./modules/covid19/api");
 
 dotenv.config();
-
-const covid19 = require("./modules/covid19/api");
-const googleMaps = require("./modules/gmaps/api");
 
 //set up Express app
 const app = express();
@@ -14,11 +11,6 @@ const port = process.env.PORT || 8888;
 
 // set up Google Maps API
 const gMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
-// const loader = new Loader({
-//   apiKey: gMapsApiKey,
-//   version: "weekly",
-//   libraries: ["places"],
-// });
 
 //important folders
 app.set("views", path.join(__dirname, "views"));
@@ -27,40 +19,48 @@ app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
 
 //PAGE ROUTES
-//INDEX, Countries/Regions/Provinces List
+//INDEX
+
+//Allows user to select a country, which will then run getRegions()
 app.get("/", async (req, res) => {
-  let countryList = await covid19.getCountries();
-  console.log(countryList);
-  res.render("index", { title: "Countries/Regions", countries: countryList });
-});
-
-app.get("/provinces", async (req, res) => {
+  let regions = await covid19.getRegions();
   let regionIso = req.query.regionIso;
-  let provinceList = await covid19.getProvinces(regionIso);
-  console.log(provinceList);
-  console.log(regionIso);
-
-  res.render("provinces", {
-    title: "Provinces",
-    provinces: provinceList,
+  let areas = await covid19.getAreas(regionIso);
+  // console.log(regions);
+  res.render("index", {
+    title: "Countries/Region",
+    regions: regions.data,
+    areas: areas.data,
     regionIso: regionIso,
   });
 });
 
+//Allows user to select a province, which will then run getProvinces()
+app.post("/areas", async (req, res) => {
+  let regionIso = req.query.regionIso;
+  let areas = await covid19.getAreas(regionIso);
+  // console.log(areas);
+  // console.log(regionIso);
+  res.render("index", {
+    title: "Areas",
+    regions: regions.data,
+    areas: areas.data,
+  });
+});
+
+//After the selected province, with the regionISO and province, report will be displayed fr that region with getReport()
 app.get("/report", async (req, res) => {
   let regionIso = req.query.regionIso;
   let province = req.query.province;
-  console.log(province);
+  // console.log(province);
   let report = await covid19.getReport(regionIso, province);
-  console.log(report);
-  //Load the Google Maps API
-  // await loader.load();
-
+  // console.log(report);
   //Pass Google Maps API to report view
-  console.log(res);
+  // console.log(res);
   res.render("report", {
     title: "COVID Report",
-    report: report,
+    report: report.data,
+    // gMapsApiKey is for the Google Maps to be rendered to display the latitude/longitude of the selected area
     gMapsApiKey: gMapsApiKey,
   });
 });
