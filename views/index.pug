@@ -2,10 +2,10 @@ extends layout
 
 block main-content
   h1.page-title COVID-19 Report Repository
-  h2.page-subtitle Regions Available for Selection
+  h2.page-subtitle Available Regions
   //- Country/region selection form
   form(action="/" method="get" id="region-form")
-    select(name="regionIso", onchange="submitForm();")
+    select(name="regionIso" id="region-select", onchange="submitForm();")
       option(value="" disabled selected) --- Select a Region or Country ---
       each r in regions
         - if (!regions.includes(r.region.name))
@@ -18,16 +18,15 @@ block main-content
 
   //- Area selection form
   if areas && areas.length > 0
-    h2.page-subtitle Territories Available for Selection
+    h2.page-subtitle Available Territories
     form(action="/report" method="get" id="area-form")
-      select(name="area")
+      select(name="area" id="area-select")
         option(value="" disabled selected) --- Select a Territory, Province, or State ---
-        option(value="") Entire region
         each a in areas
           if (a.region.lat != null && a.region.long != null && a.region.lat.trim() !== "" && a.region.long.trim() !== "" && parseFloat(a.region.lat.trim()) !== 0.0 && parseFloat(a.region.long.trim()) !== 0.0)
           option(value=a.region.province) #{a.region.province}
       input(type="hidden" name="regionIso" value=regionIso)
-      input(type="submit" value="Get Report")
+      input(type="submit" value="Get Report" disabled)
   
   //- JavaScript for ensuring if user changes regionIso, it won't submit for a report
   //- Ensures to show the area options that aren't cities and if there are only 1-2 options, generally, the country only has data over the entity that is the country itself, so it will auto submit the form for a report.
@@ -36,11 +35,21 @@ block main-content
       const form = document.getElementById("region-form");
       form.submit();
     }
-    const form = document.getElementById('area-form');
+
+    const areaSelect = document.getElementById("area-select");
+    areaSelect.addEventListener("change", () => {
+      const submitBtn = document.querySelector('#area-form input[type="submit"]');
+      submitBtn.disabled = areaSelect.value === "";
+    });
+
+    const form = document.getElementById("area-form");
     const select = form.querySelector('select');
-    const options = select.querySelectorAll('option');
+    const options = select.querySelectorAll("option");
     const nullOptions = Array.from(options).filter(option => !option.value.trim()).length;
     const nonNullOptions = options.length - nullOptions;
+    //- If the options in area-dropdown menu has less than or equal 2 and if there's at least one null option, auto submit since it likely only has data on the entire country/region itself.
     if (nonNullOptions <= 2 && nullOptions > 0) {
+        const submitBtn = document.querySelector('#area-form input[type="submit"]');
+        submitBtn.disabled = false;
         form.submit();
     }
