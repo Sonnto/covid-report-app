@@ -21,39 +21,33 @@ app.use(express.static(path.join(__dirname, "public")));
 //PAGE ROUTES
 //INDEX
 
-//Allows user to select a country, which will then run getRegions()
-app.get("/", async (req, res) => {
-  let regions = await covid19.getRegions();
-  let regionIso = req.query.regionIso;
-  let areas = await covid19.getAreas(regionIso);
-  // console.log(regions);
-  res.render("index", {
-    title: "Countries/Region",
-    regions: regions.data,
-    areas: areas.data,
-    regionIso: regionIso,
-  });
-});
+//Allows user to select a country, which will then run getRegions() then show runs getAreas(regionIso) after selecting a country
 
-//Allows user to select a province, which will then run getProvinces()
-app.post("/areas", async (req, res) => {
+app.get("/", async (req, res) => {
   let regionIso = req.query.regionIso;
+  // console.log(regionIso);
+  let regions = await covid19.getRegions();
+  // console.log(regions);
   let areas = await covid19.getAreas(regionIso);
   // console.log(areas);
-  // console.log(regionIso);
   res.render("index", {
-    title: "Areas",
+    title: "Region Selector",
     regions: regions.data,
+    regionIso: regionIso,
     areas: areas.data,
   });
+  // console.log(regions.data[0].region.name);
+  // console.log(regions.data[0].region.province);
+  // console.log(regions.data[0].region.lat);
+  // console.log(regions.data[0].region.long);
 });
 
 //After the selected province, with the regionISO and province, report will be displayed fr that region with getReport()
 app.get("/report", async (req, res) => {
   let regionIso = req.query.regionIso;
-  let province = req.query.province;
+  let areas = req.query.area;
   // console.log(province);
-  let report = await covid19.getReport(regionIso, province);
+  let report = await covid19.getReport(regionIso, areas);
   // console.log(report);
   //Pass Google Maps API to report view
   // console.log(res);
@@ -63,6 +57,8 @@ app.get("/report", async (req, res) => {
     // gMapsApiKey is for the Google Maps to be rendered to display the latitude/longitude of the selected area
     gMapsApiKey: gMapsApiKey,
   });
+  // console.log(report.data[0].region.lat);
+  // console.log(report.data[0].region.long);
 });
 
 //set up server listening
