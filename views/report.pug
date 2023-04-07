@@ -1,35 +1,36 @@
 extends layout
 
 block main-content 
-  h1.page-title COVID Report for all of #{report.data[0].region.province}, #{report.data[0].region.name}
-  p
-    b Total confirmed cases: 
-    #{report.data[0].confirmed}
-  p
-    b Total deaths: 
-    #{report.data[0].deaths}
-  p
-    b Last updated: 
-    #{report.data[0].last_update}
+  - if (report && report[0] && report[0].region) 
+    h1.page-title COVID Report for #{report[0].region.province ? report[0].region.province + ', ' : ''}#{report[0].region.name ? report[0].region.name : 'Data is inaccessible. It is a paid feature of the COVID API.'}
+    div.report-data-wrapper
+      - if (report[0].confirmed) 
+        p.report-data
+          b Confirmed: 
+          span #{report[0].confirmed.toLocaleString()}
+      - if (report[0].deaths) 
+        p.report-data
+          b Deaths: 
+          span #{report[0].deaths.toLocaleString()}
+      - if (report[0].active) 
+        p.report-data
+          b Active: 
+          span #{report[0].active.toLocaleString()}
+      - if (report[0].fatality_rate) 
+        p.report-data
+          b Fatality Rate: 
+          span #{report[0].fatality_rate}
+      - if (report[0].last_update) 
+        p.report-data
+          b Last updated: 
+          span #{new Date(report[0].last_update).toLocaleString()}
 
-  iframe(width="550",
-    height="350",
-    frameborder="0", style="border:0",
-    referrerpolicy="no-referrer-when-downgrade",
-    src=`https://www.google.com/maps/embed/v1/place?key=${gMapsApiKey}&q=${report.data[0].region.province},${report.data[0].region.name}&center=${report.data[0].region.lat},${report.data[0].region.long}`,
-    allowfullscreen)
-
-
-
-  //- p
-  //-   b Latitude: 
-  //-   #{report.data[0].region.lat}
-  //- p
-  //-   b Longitude: 
-  //-   #{report.data[0].region.long}
-
-  //- h2 COVID reports for select cities within #{report.data[0].region.province}, #{report.data[0].region.name}
-  //- ul
-  //-   each r in report.data
-  //-     div
-  //-     p Total confirmed cases: #{r.[0].cities.names}
+    - if (report[0].region.lat && report[0].region.long) 
+      iframe(width="550",
+        height="350",
+        frameborder="0", style="border:0",
+        referrerpolicy="no-referrer-when-downgrade",
+        src=`https://www.google.com/maps/embed/v1/place?key=${gMapsApiKey}&q=${report[0].region.province},${report[0].region.name}&center=${report[0].region.lat},${report[0].region.long}`,
+        allowfullscreen)
+  - else 
+    h1.page-title Data is inaccessible. It is a paid feature of the COVID API.
