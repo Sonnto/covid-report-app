@@ -2,7 +2,7 @@ extends layout
 
 block main-content 
   - if (report && report[0] && report[0].region) 
-    h1.page-title COVID Report for #{report[0].region.province ? report[0].region.province + ', ' : ''}#{report[0].region.name ? report[0].region.name : 'Data is inaccessible. It is a paid feature of the COVID API.'}
+    h1.page-title COVID-19 Report for #{report[0].region.province ? report[0].region.province + ', ' : ''}#{report[0].region.name ? report[0].region.name : 'Error. Sorry, the data you requested either returned an error, is inaccessible, or requries the paid version of the COVID API to access.'}
     div.report-data-wrapper
       - if (report[0].confirmed) 
         p.report-data
@@ -33,4 +33,5 @@ block main-content
         src=`https://www.google.com/maps/embed/v1/place?key=${gMapsApiKey}&q=${report[0].region.province},${report[0].region.name}&center=${report[0].region.lat},${report[0].region.long}`,
         allowfullscreen)
   - else 
-    h1.page-title Data is inaccessible. It is a paid feature of the COVID API.
+    h1.page-title Error
+    h2.page-subtitle Sorry, the data you requested either returned an error, is inaccessible, or requries the paid version of the COVID API to access.
