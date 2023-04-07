@@ -20,9 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //PAGE ROUTES
 //INDEX
-
 //Allows user to select a country, which will then run getRegions() then show runs getAreas(regionIso) after selecting a country
-
 app.get("/", async (req, res) => {
   let regionIso = req.query.regionIso;
   // console.log(regionIso);
