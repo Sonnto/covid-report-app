@@ -46,8 +46,12 @@ body {
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 30px;
-  text-align: center;
   color: #007aff;
+}
+
+.page-title,
+.page-subtitle {
+  text-align: center;
 }
 
 form {
@@ -59,8 +63,10 @@ form {
 select {
   font-size: 18px;
   padding: 15px;
-  width: 100%;
-  margin-bottom: 30px;
+  width: 400px;
+  margin: 0 auto;
+  text-align-last: center;
+  /* margin-bottom: 30px; */
   color: #777;
   background-color: rgba(0, 0, 0, 0.05);
   border: none;
@@ -74,6 +80,7 @@ select:focus {
 }
 
 input[type="submit"] {
+  margin-top: 30px;
   font-size: 18px;
   padding: 15px 20px;
   background-color: #007aff;
