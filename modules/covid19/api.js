@@ -31,7 +31,7 @@ async function getReport(regionIso, areas) {
     reqUrl += `&region_province=${areas}`;
     console.log(`if-statement triggered, Province: ${areas}`);
     console.log(
-      `Because the value of province is: ${area}, reqUrl is now: ${reqUrl}`
+      `Because the value of province is: ${areas}, reqUrl is now: ${reqUrl}`
     );
   }
   console.log(`After if statement, was it triggered? reqUrl is: ${reqUrl}`);
@@ -39,7 +39,6 @@ async function getReport(regionIso, areas) {
     method: "GET",
   });
   console.log(`After await fetch. res: ${res}`);
-
   return await res.json();
 }
 
