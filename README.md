@@ -12,7 +12,7 @@ An application with a minimalist interface, it returns COVID-related data for a 
 - CSS
 
 ## APIs
-- COVID API (https://covid-api.com)
+- [COVID-19 Statistics](https://covid-api.com)
 - Google Maps embedded API
 
 # Instructions
