@@ -14,3 +14,23 @@ An application with a minimalist interface, it returns COVID-related data for a 
 ## APIs
 - COVID API (https://covid-api.com)
 - Google Maps embedded API
+
+# Installation Steps
+
+## Using npm
+
+Run commands
+
+1. `npm install`
+
+2. `npm run dev`
+
+## Or using yarn
+
+Run commands
+
+1. `npm install --global yarn`
+
+2. `yarn install`
+
+3. `yarn run dev`
