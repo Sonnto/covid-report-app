@@ -15,7 +15,7 @@ An application with a minimalist interface, it returns COVID-related data for a 
 - COVID API (https://covid-api.com)
 - Google Maps embedded API
 
-# Instructions/Installation Steps
+# Instructions
 
 ## Using npm
 
@@ -34,3 +34,7 @@ Run commands
 2. `yarn install`
 
 3. `yarn run dev`
+
+## What to do?
+
+Select the various types of jurisdictions for a COVID-19 report
