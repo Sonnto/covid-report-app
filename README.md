@@ -13,7 +13,7 @@ An application with a minimalist interface, it returns COVID-related data for a 
 
 ## APIs
 - [COVID-19 Statistics](https://covid-api.com)
-- [Google Maps](https://developers.google.com/maps/documentation/embed/get-started)
+- [Google Mapbox](https://developers.google.com/maps/documentation/embed/get-started)
 
 # Instructions
 
